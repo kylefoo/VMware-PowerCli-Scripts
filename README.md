@@ -1,4 +1,4 @@
-VMware PowerCli for Cloud Deployment Automation on VMware
+VMware PowerCli for Cloud Deployment Automation on VMware Cloud Infrastructure
 ==========
 
 System Automation Configuration
