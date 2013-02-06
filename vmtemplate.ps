@@ -1,0 +1,35 @@
+param(
+  [String]$vCenterAddress
+ ,[String]$vCenterProtocol
+ ,[String]$vCenterPort
+ ,[String]$vCenterUsername
+ ,[String]$vCenterPassword
+)
+
+Add-PSSnapin VMware.VimAutomation.Core
+
+Connect-VIServer -Server $vCenterAddress -Port $vCenterPort -Protocol $vCenterProtocol -User $vCenterUsername -Password $vCenterPassword -WarningAction SilentlyContinue | Out-Null
+
+$templates=Get-Template * | get-view
+if ($templates -ne $Null)
+{
+'<templates>'
+foreach($template in $templates){
+'<template>'
+[System.String]::Concat('<Name>', $template.name,'</Name>')
+$parentID = $template.parent
+$folder = get-folder -id $parentID | get-view
+[System.String]::Concat('<Folder>', $folder.Name,'</Folder>')
+$grp=get-view $folder.parent
+$dc=$grp.parent
+$datacenter=get-datacenter -id $dc
+[System.String]::Concat('<Datacenter>', $datacenter.Name,'</Datacenter>')
+'</template>'
+}
+'</templates>'
+}
+Else
+{
+exit
+}
+exit
