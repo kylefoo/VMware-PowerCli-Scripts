@@ -1,0 +1,29 @@
+param(
+  [String]$vCenterAddress
+ ,[String]$vCenterProtocol
+ ,[String]$vCenterPort
+ ,[String]$vCenterUsername
+ ,[String]$vCenterPassword
+ ,[String]$Datacenter
+)
+
+Add-PSSnapin VMware.Vimautomation.Core
+Connect-VIServer -Server $vCenterAddress -Port $vCenterPort -Protocol $vCenterProtocol -User $vCenterUsername -Password $vCenterPassword -WarningAction SilentlyContinue | Out-Null
+
+$clusters = Get-Datacenter $Datacenter | Get-Cluster * | Select-Object Name
+if($clusters -ne $Null)
+{
+'<clusters>'
+foreach ($cluster in $clusters)
+{
+'<cluster>'
+[System.String]::Concat('<Name>', $cluster.Name,'</Name>')
+'</cluster>'
+}
+'</clusters>'
+}
+Else
+{
+exit
+}
+exit
