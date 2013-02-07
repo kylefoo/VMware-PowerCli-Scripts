@@ -1,0 +1,30 @@
+
+param(
+  [String]$vCenterAddress
+ ,[String]$vCenterProtocol
+ ,[String]$vCenterPort
+ ,[String]$vCenterUsername
+ ,[String]$vCenterPassword
+ ,[String]$Datacenter
+)
+
+Add-PSSnapin VMware.Vimautomation.Core
+Connect-VIServer -Server $vCenterAddress -Port $vCenterPort -Protocol $vCenterProtocol -User $vCenterUsername -Password $vCenterPassword -WarningAction SilentlyContinue | Out-Null
+
+$resourcepools = Get-Datacenter $Datacenter | Get-ResourcePool * | Select-Object Name
+if($resourcepools -ne $Null)
+{
+'<resourcepools>'
+foreach ($resourcepool in $resourcepools)
+{
+'<resourcepool>'
+[System.String]::Concat('<Name>', $resourcepool.Name,'</Name>')
+'</resourcepool>'
+}
+'</resourcepools>'
+}
+Else
+{
+exit
+}
+exit
