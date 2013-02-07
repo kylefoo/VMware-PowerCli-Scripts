@@ -1,0 +1,29 @@
+param(
+  [String]$vCenterAddress
+ ,[String]$vCenterProtocol
+ ,[String]$vCenterPort
+ ,[String]$vCenterUsername
+ ,[String]$vCenterPassword
+ ,[String]$Datacenter
+)
+
+Add-PSSnapin VMware.Vimautomation.Core
+Connect-VIServer -Server $vCenterAddress -Port $vCenterPort -Protocol $vCenterProtocol -User $vCenterUsername -Password $vCenterPassword -WarningAction SilentlyContinue | Out-Null
+
+$virtualportgroups = Get-VirtualPortalGroup * | Select-Object Name
+if($virtualportgroups -ne $Null)
+{
+'<virtualportgroups>'
+foreach ($virtualportgroup in $virtualportgroups)
+{
+'<virtualportgroup>'
+[System.String]::Concat('<Name>', $virtualportgroup.Name,'</Name>')
+'</virtualportgroup>'
+}
+'</virtualportgroups>'
+}
+Else
+{
+exit
+}
+exit
