@@ -1,0 +1,29 @@
+param(
+  [String]$vCenterAddress
+ ,[String]$vCenterProtocol
+ ,[String]$vCenterPort
+ ,[String]$vCenterUsername
+ ,[String]$vCenterPassword
+ ,[String]$Datacenter
+)
+
+Add-PSSnapin VMware.Vimautomation.Core
+Connect-VIServer -Server $vCenterAddress -Port $vCenterPort -Protocol $vCenterProtocol -User $vCenterUsername -Password $vCenterPassword -WarningAction SilentlyContinue | Out-Null
+
+$datastores = Get-Datacenter $Datacenter | Get-Datastore * | Select-Object Name
+if($datastores -ne $Null)
+{
+'<datastores>'
+foreach ($datastore in $datastores)
+{
+'<datastore>'
+[System.String]::Concat('<Name>', $datastore.Name,'</Name>')
+'</datastore>'
+}
+'</datastores>'
+}
+Else
+{
+exit
+}
+exit
